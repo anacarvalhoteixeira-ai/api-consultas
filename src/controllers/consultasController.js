@@ -15,13 +15,7 @@ const listarConsultas = async (req, res) =>{
 
 const buscarConsulta = async (req, res) => {
     try {
-        const id = Number(req.params.id);
-
-        if (isNaN(id)){
-            return res.status(400).json({
-                mensagem: "ID inválido"
-            })
-        }
+        const id = req.params.id;
 
         const consulta = await consultasModel.buscarPorId(id);
 
@@ -44,13 +38,7 @@ const buscarConsulta = async (req, res) => {
 const agendarConsulta = async (req, res) => {
     try {
         const { id, paciente, medico, especialidade } = req.body;
-
-        if(!id || !paciente || !medico || !especialidade) {
-            return res.status(400).json({
-                mensagem: "Informe os dados completos"
-            })
-        }
-
+       
         const novaConsulta = await consultasModel.criar({
             id,
             paciente,
