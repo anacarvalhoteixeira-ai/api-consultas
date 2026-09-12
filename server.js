@@ -1,8 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const consultasRoutes = require("./src/routes/consultasRoutes")
+const authRoutes = require('./src/routes/authRoutes');
 
 const app = express()
-const PORTA = 3000
+const PORTA = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -13,6 +16,7 @@ app.get("/", (req, res) =>{
 });
 
 app.use("/consultas", consultasRoutes);
+app.use('/auth', authRoutes);
 
 
 app.listen(PORTA, () => {
