@@ -5,7 +5,7 @@ const consultasRoutes = require("./src/routes/consultasRoutes")
 const authRoutes = require('./src/routes/authRoutes');
 
 const app = express()
-const PORTA = process.env.PORT || 3000;
+const PORTA = process.env.PORT || 3001;
 
 app.use(express.json());
 

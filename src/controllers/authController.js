@@ -1,7 +1,26 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const usuarios = [];
+const usuarios = [
+    {
+        id: 1,
+        email: 'paciente@email.com',
+        password: '$2b$10$10HZ0D72pAzwVX7.wXPZe.IoyibIbWx9h2IBMDtNqayeJVuzHSe16',
+        role: 'PACIENTE'
+    },
+    {
+        id: 2,
+        email: 'medico@email.com',
+        password: '$2b$10$10HZ0D72pAzwVX7.wXPZe.IoyibIbWx9h2IBMDtNqayeJVuzHSe16',
+        role: 'MEDICO'
+    },
+    {
+        id: 3,
+        email: 'admin@email.com',
+        password: '$2b$10$10HZ0D72pAzwVX7.wXPZe.IoyibIbWx9h2IBMDtNqayeJVuzHSe16',
+        role: 'ADMIN'
+    }
+];
 
 const register = async (req, res) => {
     const { email, password, role } = req.body;
