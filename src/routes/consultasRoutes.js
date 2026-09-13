@@ -5,19 +5,24 @@ const {
     idConsultaSchema
 } = require('../schemas/consultasSchema');
 const validate = require('../middlewares/validate');
+const authMiddleware = require('../middlewares/authMiddleware');
+const autorizarCargos = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
 
 router.post(
     '/',
+    authMiddleware,
+    autorizarCargos('ADMIN', 'MEDICO'),
     validate(criarConsultaSchema, 'body'),
     consultasController.agendarConsulta
 );
 
-router.get('/', consultasController.listarConsultas);
+router.get('/', authMiddleware, consultasController.listarConsultas);
 
 router.get(
     '/:id',
+    authMiddleware,
     validate(idConsultaSchema, 'params'),
     consultasController.buscarConsulta
 );
