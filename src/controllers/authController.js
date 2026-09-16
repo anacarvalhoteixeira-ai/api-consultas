@@ -1,75 +1,55 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import prisma from '../../prisma/client.js';
 
-const usuarios = [
-    {
-        id: 1,
-        email: 'paciente@email.com',
-        password: '$2b$10$10HZ0D72pAzwVX7.wXPZe.IoyibIbWx9h2IBMDtNqayeJVuzHSe16',
-        role: 'PACIENTE'
-    },
-    {
-        id: 2,
-        email: 'medico@email.com',
-        password: '$2b$10$10HZ0D72pAzwVX7.wXPZe.IoyibIbWx9h2IBMDtNqayeJVuzHSe16',
-        role: 'MEDICO'
-    },
-    {
-        id: 3,
-        email: 'admin@email.com',
-        password: '$2b$10$10HZ0D72pAzwVX7.wXPZe.IoyibIbWx9h2IBMDtNqayeJVuzHSe16',
-        role: 'ADMIN'
-    }
-];
+const dadosPublicos = ({ id, nome, email, role }) => ({ id, nome, email, role });
 
-const register = async (req, res) => {
-    const { email, password, role } = req.body;
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    usuarios.push({
-        id: usuarios.length + 1,
-        email,
-        password: passwordHash,
-        role
-    });
-
-    return res.status(201).json({
-        mensagem: 'Usuário cadastrado com sucesso'
-    });
+const salvarUsuario = async ({ nome, email, password, role }) => {
+  const passwordHash = await bcrypt.hash(password, 12);
+  return prisma.usuario.create({ data: { nome, email, password: passwordHash, role } });
 };
 
-const login = async (req, res) => {
+const responderErroCadastro = (erro, res) => {
+  if (erro.code === 'P2002') return res.status(409).json({ mensagem: 'Este e-mail já está cadastrado' });
+  console.error(erro);
+  return res.status(500).json({ mensagem: 'Erro ao cadastrar usuário' });
+};
+
+export const register = async (req, res) => {
+  try {
+    const usuario = await salvarUsuario({ ...req.body, role: 'PACIENTE' });
+    return res.status(201).json({ mensagem: 'Paciente cadastrado com sucesso', usuario: dadosPublicos(usuario) });
+  } catch (erro) {
+    return responderErroCadastro(erro, res);
+  }
+};
+
+export const criarUsuario = async (req, res) => {
+  try {
+    const usuario = await salvarUsuario(req.body);
+    return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso', usuario: dadosPublicos(usuario) });
+  } catch (erro) {
+    return responderErroCadastro(erro, res);
+  }
+};
+
+export const login = async (req, res) => {
+  try {
     const { email, password } = req.body;
-    const usuario = usuarios.find((user) => user.email === email);
+    const usuario = await prisma.usuario.findUnique({ where: { email } });
 
-    if (!usuario) {
-        return res.status(401).json({
-            mensagem: 'Credenciais inválidas'
-        });
+    if (!usuario || !(await bcrypt.compare(password, usuario.password))) {
+      return res.status(401).json({ mensagem: 'Credenciais inválidas' });
     }
 
-    const senhaValida = await bcrypt.compare(password, usuario.password);
+    const token = jwt.sign({ role: usuario.role }, process.env.JWT_SECRET, {
+      subject: String(usuario.id),
+      expiresIn: '1h',
+    });
 
-    if (!senhaValida) {
-        return res.status(401).json({
-            mensagem: 'Credenciais inválidas'
-        });
-    }
-
-    const token = jwt.sign(
-        {
-            id: usuario.id,
-            email: usuario.email,
-            role: usuario.role
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-    );
-
-    return res.status(200).json({ token });
-};
-
-module.exports = {
-    register,
-    login
+    return res.status(200).json({ token, usuario: dadosPublicos(usuario) });
+  } catch (erro) {
+    console.error(erro);
+    return res.status(500).json({ mensagem: 'Erro ao realizar login' });
+  }
 };

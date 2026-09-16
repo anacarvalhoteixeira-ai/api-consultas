@@ -1,30 +1,14 @@
-const express = require('express');
-const consultasController = require('../controllers/consultasController');
-const {
-    criarConsultaSchema,
-    idConsultaSchema
-} = require('../schemas/consultasSchema');
-const validate = require('../middlewares/validate');
-const authMiddleware = require('../middlewares/authMiddleware');
-const autorizarCargos = require('../middlewares/roleMiddleware');
+import express from 'express';
+import { agendarConsulta, buscarConsulta, listarConsultas } from '../controllers/consultasController.js';
+import { criarConsultaSchema, idConsultaSchema } from '../schemas/consultasSchema.js';
+import validate from '../middlewares/validate.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
+import autorizarCargos from '../middlewares/roleMiddleware.js';
 
 const router = express.Router();
+router.use(authMiddleware);
+router.get('/', listarConsultas);
+router.get('/:id', validate(idConsultaSchema, 'params'), buscarConsulta);
+router.post('/', autorizarCargos('ADMIN', 'MEDICO', 'PACIENTE'), validate(criarConsultaSchema, 'body'), agendarConsulta);
 
-router.post(
-    '/',
-    authMiddleware,
-    autorizarCargos('ADMIN', 'MEDICO'),
-    validate(criarConsultaSchema, 'body'),
-    consultasController.agendarConsulta
-);
-
-router.get('/', authMiddleware, consultasController.listarConsultas);
-
-router.get(
-    '/:id',
-    authMiddleware,
-    validate(idConsultaSchema, 'params'),
-    consultasController.buscarConsulta
-);
-
-module.exports = router;
+export default router;

@@ -1,17 +1,14 @@
-const { z } = require('zod');
+import { z } from 'zod';
 
-const registerSchema = z.object({
-    email: z.string().email('Informe um e-mail válido'),
-    password: z.string().min(6, 'A senha deve conter no mínimo 6 caracteres'),
-    role: z.enum(['PACIENTE', 'MEDICO', 'ADMIN'])
-});
+const email = z.string().trim().toLowerCase().email('Informe um e-mail válido');
+const password = z.string().min(8, 'A senha deve conter pelo menos 8 caracteres').max(72);
+const nome = z.string().trim().min(3, 'Informe o nome completo').max(150);
 
-const loginSchema = z.object({
-    email: z.string().email('Informe um e-mail válido'),
-    password: z.string().min(6, 'A senha deve conter no mínimo 6 caracteres')
-});
-
-module.exports = {
-    registerSchema,
-    loginSchema
-};
+export const registerSchema = z.object({ nome, email, password }).strict();
+export const criarUsuarioSchema = z.object({
+  nome,
+  email,
+  password,
+  role: z.enum(['PACIENTE', 'MEDICO', 'ADMIN']),
+}).strict();
+export const loginSchema = z.object({ email, password: z.string().min(1, 'Informe a senha') }).strict();

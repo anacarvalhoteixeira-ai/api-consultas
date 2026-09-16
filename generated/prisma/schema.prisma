@@ -32,7 +32,6 @@ model Consulta {
   especialidade String   @db.VarChar(100)
   dataConsulta  DateTime
 
-  
   pacienteId Int
   paciente   Usuario @relation("PacienteConsultas", fields: [pacienteId], references: [id])
 

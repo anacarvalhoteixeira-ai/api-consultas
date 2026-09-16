@@ -1,17 +1,12 @@
-const { z } = require('zod');
+import { z } from 'zod';
 
-const criarConsultaSchema = z.object({
-    id: z.number().positive('O id deve ser maior que zero'),
-    paciente: z.string().min(3, 'O nome do paciente deve conter no mínimo 3 caracteres'),
-    medico: z.string().min(3, 'O nome do medico deve conter no mínimo 3 caracteres'),
-    especialidade: z.string().min(3, 'A especialidade deve conter no mínimo 3 caracteres')
-});
+const id = z.coerce.number().int().positive();
 
-const idConsultaSchema = z.object({
-    id: z.coerce.number().int().positive()
-});
+export const criarConsultaSchema = z.object({
+  pacienteId: id.optional(),
+  medicoId: id.optional(),
+  especialidade: z.string().trim().min(3).max(100),
+  dataConsulta: z.coerce.date().refine((data) => data > new Date(), 'A consulta deve estar no futuro'),
+}).strict();
 
-module.exports = {
-    criarConsultaSchema,
-    idConsultaSchema
-};
+export const idConsultaSchema = z.object({ id });

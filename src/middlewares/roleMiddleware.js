@@ -1,13 +1,8 @@
-const autorizarCargos = (...cargosPermitidos) => {
-    return (req, res, next) => {
-        if (!cargosPermitidos.includes(req.user.role)) {
-            return res.status(403).json({
-                mensagem: 'Acesso negado: Recursos restritos'
-            });
-        }
-
-        return next();
-    };
+const autorizarCargos = (...cargosPermitidos) => (req, res, next) => {
+  if (!req.user || !cargosPermitidos.includes(req.user.role)) {
+    return res.status(403).json({ mensagem: 'Você não tem permissão para esta ação' });
+  }
+  return next();
 };
 
-module.exports = autorizarCargos;
+export default autorizarCargos;

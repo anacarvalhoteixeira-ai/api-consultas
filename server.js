@@ -1,25 +1,20 @@
-require('dotenv').config();
+import 'dotenv/config';
+import express from 'express';
+import consultasRoutes from './src/routes/consultasRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
 
-const express = require('express');
-const consultasRoutes = require("./src/routes/consultasRoutes")
-const authRoutes = require('./src/routes/authRoutes');
+if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET deve ser definido no ambiente');
 
-const app = express()
+const app = express();
 const PORTA = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.static('public'));
-
-app.get("/", (req, res) =>{
-    res.json({
-        mensagem: "Sistema de Gestão de Consultas ativo"
-    })
-});
-
-app.use("/consultas", consultasRoutes);
 app.use('/auth', authRoutes);
+app.use('/consultas', consultasRoutes);
 
+app.use((req, res) => res.status(404).json({ mensagem: 'Rota não encontrada' }));
 
 app.listen(PORTA, () => {
-    console.log(`Servidor rodando em http://localhost:${PORTA}`)
+  console.log(`Servidor rodando em http://localhost:${PORTA}`);
 });
