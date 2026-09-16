@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vita | Gestão de consultas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main id="login-screen" class="auth-layout">
+      <section class="auth-copy">
+        <a class="brand" href="/">V<span>i</span>ta</a>
+        <div>
+          <p class="eyebrow">GESTÃO CLÍNICA</p>
+          <h1>Seu cuidado,<br /><em>bem organizado.</em></h1>
+          <p class="intro">Uma maneira simples e segura de acompanhar os atendimentos da sua clínica.</p>
+        </div>
+        <p class="footer-note">VITA HEALTHCARE · 2026</p>
+      </section>
+      <section class="auth-panel">
+        <form id="login-form" class="login-card">
+          <p class="eyebrow">BEM-VINDO DE VOLTA</p>
+          <h2>Acesse sua conta</h2>
+          <p class="muted">Entre para gerenciar suas consultas.</p>
+          <label>E-mail<input id="email" type="email" autocomplete="email" placeholder="voce@exemplo.com" required /></label>
+          <label>Senha<input id="password" type="password" autocomplete="current-password" placeholder="Sua senha" minlength="6" required /></label>
+          <p id="login-error" class="form-message" aria-live="polite"></p>
+          <button class="primary" type="submit">Entrar <span>→</span></button>
+          <p class="credential-hint">Use uma conta já cadastrada na API.</p>
+        </form>
+      </section>
+    </main>
+
+    <main id="app-screen" class="app-layout" hidden>
+      <aside class="sidebar">
+        <a class="brand" href="/">V<span>i</span>ta</a>
+        <nav><a class="nav-link active" href="#consultas">▦ <span>Consultas</span></a></nav>
+        <div class="profile"><div id="avatar" class="avatar">U</div><div><strong id="user-email"></strong><small id="user-role"></small></div></div>
+        <button id="logout" class="logout">↪ Sair</button>
+      </aside>
+      <section class="content" id="consultas">
+        <header class="topbar"><div><p class="eyebrow">VISÃO GERAL</p><h1>Consultas</h1><p class="muted">Acompanhe os atendimentos agendados.</p></div><button id="open-modal" class="primary" hidden>+ Nova consulta</button></header>
+        <section class="summary"><article><span>CONSULTAS</span><strong id="total">0</strong><small>Total registrado</small></article><article><span>ESPECIALIDADES</span><strong id="specialties">0</strong><small>Em atendimento</small></article></section>
+        <section class="table-section"><div class="table-head"><h2>Agenda de consultas</h2><label class="search">⌕ <input id="search" type="search" placeholder="Buscar paciente ou médico" /></label></div><div class="table-wrap"><table><thead><tr><th>PACIENTE</th><th>MÉDICO</th><th>ESPECIALIDADE</th><th>IDENTIFICAÇÃO</th></tr></thead><tbody id="consultas-list"></tbody></table><div id="empty" class="empty" hidden>Nenhuma consulta encontrada.</div></div></section>
+      </section>
+    </main>
+
+    <div id="modal" class="modal" aria-hidden="true"><div class="modal-card"><button id="close-modal" class="close" aria-label="Fechar">×</button><p class="eyebrow">NOVO AGENDAMENTO</p><h2>Adicionar consulta</h2><form id="consulta-form"><label>Paciente<input name="paciente" minlength="3" required placeholder="Nome completo" /></label><label>Médico<input name="medico" minlength="3" required placeholder="Nome do profissional" /></label><label>Especialidade<input name="especialidade" minlength="3" required placeholder="Ex.: Cardiologia" /></label><p id="consulta-error" class="form-message" aria-live="polite"></p><button class="primary" type="submit">Agendar consulta <span>→</span></button></form></div></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

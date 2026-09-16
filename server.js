@@ -8,6 +8,7 @@ const app = express()
 const PORTA = process.env.PORT || 3001;
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.get("/", (req, res) =>{
     res.json({
