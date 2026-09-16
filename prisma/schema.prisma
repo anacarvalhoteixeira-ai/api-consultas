@@ -9,3 +9,32 @@ generator client {
 datasource db {
   provider = "mysql"
 }
+
+model Usuario {
+id      Int  @id @default(autoincrement())
+nome    String @db.VarChar(150)
+email   String @unique @db.VarChar(150)
+password    String @db.VarChar(255) 
+role   Role  @default(USER)
+
+consultasComoPaciente Consulta[] @relation("PacienteConsulta")
+consultasComoMedico   Consulta[] @relation("MedicoConsulta")
+}
+
+enum Role {
+  USER
+  ADMIN
+  MEDICO
+}
+
+model Consulta {
+  id       Int  @id @default(autoincrement())
+  especialidade String @db.VarChar(100)
+  dataConsulta DateTime 
+
+  pacienteId Int
+  paciente Usuario @relation("PacienteConsulta", fields: [pacienteId], references: [id])
+
+  medicoId Int
+  medico  Usuario @relation("MedicoConsulta", fields: [medicoId], references: [id])
+}
