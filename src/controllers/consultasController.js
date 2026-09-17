@@ -10,7 +10,10 @@ const consultaNaoEncontrada = (res) => res.status(404).json({ mensagem: 'Consult
 
 export const listarConsultas = async (req, res) => {
   try {
-    const where = req.user.role === 'PACIENTE' ? { pacienteId: req.user.id } : {};
+    const where =
+      req.user.role === 'PACIENTE' ? { pacienteId: req.user.id }
+        : req.user.role === 'MEDICO' ? { medicoId: req.user.id }
+          : {};
     const consultas = await listar(where);
     return res.status(200).json(consultas);
   } catch (erro) {
@@ -22,7 +25,11 @@ export const listarConsultas = async (req, res) => {
 export const buscarConsulta = async (req, res) => {
   try {
     const consulta = await buscarPorId(req.params.id);
-    if (!consulta || (req.user.role === 'PACIENTE' && consulta.pacienteId !== req.user.id)) {
+    const semPermissao =
+      (req.user.role === 'PACIENTE' && consulta?.pacienteId !== req.user.id)
+      || (req.user.role === 'MEDICO' && consulta?.medicoId !== req.user.id);
+
+    if (!consulta || semPermissao) {
       return consultaNaoEncontrada(res);
     }
     return res.status(200).json(consulta);

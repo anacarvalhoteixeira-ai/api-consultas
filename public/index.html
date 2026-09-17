@@ -1,52 +1,144 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clínica VSC</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <main id="login-screen" class="login-page">
-    <section class="card login-card">
-      <form id="login-form">
-        <h1>Clínica VSC</h1>
-        <p>Entre para consultar sua agenda.</p>
-        <label>E-mail<input id="email" type="email" placeholder="voce@exemplo.com" required /></label>
-        <label>Senha<input id="password" type="password" placeholder="Sua senha" required /></label>
-        <p id="login-error" class="error"></p>
-        <button type="submit">Entrar</button>
-        <p class="switch">Ainda não possui conta? <button id="show-register" type="button" class="link-button">Cadastre-se</button></p>
-      </form>
-      <form id="register-form" hidden>
-        <h1>Criar conta</h1>
-        <p>O cadastro é destinado a pacientes.</p>
-        <label>Nome completo<input id="register-name" type="text" minlength="3" placeholder="Seu nome" required /></label>
-        <label>E-mail<input id="register-email" type="email" placeholder="voce@exemplo.com" required /></label>
-        <label>Senha<input id="register-password" type="password" minlength="8" placeholder="Mínimo de 8 caracteres" required /></label>
-        <p id="register-error" class="error"></p>
-        <button type="submit">Criar conta</button>
-        <p class="switch">Já possui conta? <button id="show-login" type="button" class="link-button">Entrar</button></p>
-      </form>
-    </section>
-  </main>
-
-  <main id="app-screen" class="app" hidden>
-    <header>
-      <div><strong>Clínica VSC</strong><span id="user-name"></span><small id="user-role"></small></div>
-      <button id="logout" class="secondary">Sair</button>
-    </header>
-    <section class="content">
-      <div class="title"><div><h1>Consultas</h1><p>Agenda de atendimentos.</p></div><button id="open-modal">Nova consulta</button></div>
-      <label class="search">Buscar<input id="search" type="search" placeholder="Paciente, médico ou especialidade" /></label>
-      <section class="card">
-        <table><thead><tr><th>Paciente</th><th>Médico</th><th>Especialidade</th><th>Data</th></tr></thead><tbody id="consultas-list"></tbody></table>
-        <p id="empty" class="empty" hidden>Nenhuma consulta encontrada.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clínica VSC</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="login-screen" class="login-page">
+      <section class="card login-card">
+        <form id="login-form">
+          <h1>Clínica VSC</h1>
+          <p>Entre para consultar sua agenda.</p>
+          <label
+            >E-mail<input
+              id="email"
+              type="email"
+              placeholder="voce@exemplo.com"
+              required
+          /></label>
+          <label
+            >Senha<input
+              id="password"
+              type="password"
+              placeholder="Sua senha"
+              required
+          /></label>
+          <p id="login-error" class="error"></p>
+          <button type="submit">Entrar</button>
+          <p class="switch">
+            Ainda não possui conta?
+            <button id="show-register" type="button" class="link-button">
+              Cadastre-se
+            </button>
+          </p>
+        </form>
+        <form id="register-form" hidden>
+          <h1>Criar conta</h1>
+          <p>O cadastro é destinado a pacientes.</p>
+          <label
+            >Nome completo<input
+              id="register-name"
+              type="text"
+              minlength="3"
+              placeholder="Seu nome"
+              required
+          /></label>
+          <label
+            >E-mail<input
+              id="register-email"
+              type="email"
+              placeholder="voce@exemplo.com"
+              required
+          /></label>
+          <label
+            >Senha<input
+              id="register-password"
+              type="password"
+              minlength="8"
+              placeholder="Mínimo de 8 caracteres"
+              required
+          /></label>
+          <p id="register-error" class="error"></p>
+          <button type="submit">Criar conta</button>
+          <p class="switch">
+            Já possui conta?
+            <button id="show-login" type="button" class="link-button">
+              Entrar
+            </button>
+          </p>
+        </form>
       </section>
-    </section>
-  </main>
+    </main>
 
-  <div id="modal" class="modal"><form id="consulta-form" class="card modal-card"><button id="close-modal" class="close" type="button">×</button><h2>Nova consulta</h2><label>Especialidade<input name="especialidade" required minlength="3" /></label><label>Data e hora<input name="dataConsulta" type="datetime-local" required /></label><div id="paciente-field"><label>ID do paciente<input name="pacienteId" type="number" min="1" /></label></div><div id="medico-field"><label>ID do médico<input name="medicoId" type="number" min="1" /></label></div><p id="form-help" class="help"></p><p id="consulta-error" class="error"></p><button type="submit">Agendar</button></form></div>
-  <script src="app.js"></script>
-</body>
+    <main id="app-screen" class="app" hidden>
+      <header>
+        <div>
+          <strong>Clínica VSC</strong><span id="user-name"></span
+          ><small id="user-role"></small>
+        </div>
+        <button id="logout" class="secondary">Sair</button>
+      </header>
+      <section class="content">
+        <div class="title">
+          <div>
+            <h1>Consultas</h1>
+            <p>Agenda de atendimentos.</p>
+          </div>
+          <button id="open-modal">Nova consulta</button>
+        </div>
+        <label class="search"
+          >Buscar<input
+            id="search"
+            type="search"
+            placeholder="Paciente, médico ou especialidade"
+        /></label>
+        <section class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Especialidade</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody id="consultas-list"></tbody>
+          </table>
+          <p id="empty" class="empty" hidden>Nenhuma consulta encontrada.</p>
+        </section>
+      </section>
+    </main>
+
+    <div id="modal" class="modal">
+      <form id="consulta-form" class="card modal-card">
+        <button id="close-modal" class="close" type="button">×</button>
+        <h2>Nova consulta</h2>
+        <label
+          >Especialidade<input
+            name="especialidade"
+            required
+            minlength="3" /></label
+        ><label
+          >Data e hora<input name="dataConsulta" type="datetime-local" required
+        /></label>
+        <div id="paciente-field">
+          <label
+            >ID do paciente<input name="pacienteId" type="number" min="1"
+          /></label>
+        </div>
+        <div id="medico-field">
+          <label
+            >ID do médico<input name="medicoId" type="number" min="1"
+          /></label>
+        </div>
+        <p id="form-help" class="help"></p>
+        <p id="consulta-error" class="error"></p>
+        <button type="submit">Agendar</button>
+      </form>
+    </div>
+    <script src="app.js"></script>
+  </body>
 </html>
