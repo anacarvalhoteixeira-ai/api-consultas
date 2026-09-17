@@ -13,7 +13,7 @@ const authMiddleware = (req, res, next) => {
     req.user = { id, role: decoded.role };
     return next();
   } catch {
-    return res.status(401).json({ mensagem: 'Token inválido ou expirado' });
+      return res.status(401).json({ mensagem: 'Token inválido ou expirado' });
   }
 };
 

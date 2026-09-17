@@ -27,5 +27,21 @@ $('#logout').addEventListener('click', logout);
 $('#search').addEventListener('input', renderConsultas);
 $('#open-modal').addEventListener('click', () => $('#modal').classList.add('visible'));
 $('#close-modal').addEventListener('click', () => $('#modal').classList.remove('visible'));
-$('#consulta-form').addEventListener('submit', async (event) => { event.preventDefault(); $('#consulta-error').textContent = ''; const values = Object.fromEntries(new FormData(event.currentTarget)); if (values.pacienteId) values.pacienteId = Number(values.pacienteId); else delete values.pacienteId; if (values.medicoId) values.medicoId = Number(values.medicoId); else delete values.medicoId; try { await api('/consultas', { method: 'POST', body: JSON.stringify(values) }); event.currentTarget.reset(); $('#modal').classList.remove('visible'); loadConsultas(); } catch (error) { $('#consulta-error').textContent = error.message; } });
+$('#consulta-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  $('#consulta-error').textContent = '';
+  const values = Object.fromEntries(new FormData(form));
+  if (values.pacienteId) values.pacienteId = Number(values.pacienteId); else delete values.pacienteId;
+  if (values.medicoId) values.medicoId = Number(values.medicoId); else delete values.medicoId;
+
+  try {
+    await api('/consultas', { method: 'POST', body: JSON.stringify(values) });
+    form.reset();
+    $('#modal').classList.remove('visible');
+    loadConsultas();
+  } catch (error) {
+    $('#consulta-error').textContent = error.message;
+  }
+});
 if (state.token && state.user) showApp();

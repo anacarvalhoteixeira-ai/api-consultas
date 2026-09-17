@@ -33,6 +33,19 @@ export const criarUsuario = async (req, res) => {
   }
 };
 
+export const listarUsuarios = async (req, res) => {
+  try {
+    const usuarios = await prisma.usuario.findMany({
+      select: { id: true, nome: true, email: true, role: true },
+      orderBy: { nome: 'asc' },
+    });
+    return res.status(200).json(usuarios);
+  } catch (erro) {
+    console.error(erro);
+    return res.status(500).json({ mensagem: 'Erro ao buscar usuários' });
+  }
+};
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
